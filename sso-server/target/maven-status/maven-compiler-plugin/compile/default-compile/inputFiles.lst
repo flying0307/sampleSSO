@@ -1,0 +1,10 @@
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/config/ResourceServerConfig.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/config/AuthorizationServerConfig.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/controller/UserInfoController.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/service/UserDetailsServiceImpl.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/controller/OidcDiscoveryController.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/controller/LoginController.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/SsoServerApplication.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/service/DataInitializer.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/repository/UserRepository.java
+/Users/flyingmac/Documents/GitHub/xSSO/sso-server/src/main/java/com/example/sso/entity/User.java

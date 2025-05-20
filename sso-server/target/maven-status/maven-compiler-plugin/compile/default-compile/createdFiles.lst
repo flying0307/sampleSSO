@@ -1,0 +1,10 @@
+com/example/sso/repository/UserRepository.class
+com/example/sso/service/DataInitializer.class
+com/example/sso/config/AuthorizationServerConfig.class
+com/example/sso/service/UserDetailsServiceImpl.class
+com/example/sso/controller/OidcDiscoveryController.class
+com/example/sso/controller/LoginController.class
+com/example/sso/controller/UserInfoController.class
+com/example/sso/SsoServerApplication.class
+com/example/sso/entity/User.class
+com/example/sso/config/ResourceServerConfig.class

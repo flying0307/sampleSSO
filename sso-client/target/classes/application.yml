@@ -1,0 +1,57 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        http-only: true
+        secure: false
+      timeout: 30m
+
+spring:
+  application:
+    name: sso-client
+    
+  thymeleaf:
+    cache: false
+    
+  datasource:
+    url: jdbc:h2:mem:client-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+    
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+    
+  security:
+    oauth2:
+      client:
+        registration:
+          sso-client:
+            client-id: sample-client
+            client-secret: sample-secret
+            client-name: SSO客户端
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile
+            client-authentication-method: client_secret_basic
+        provider:
+          sso-client:
+            authorization-uri: http://localhost:8080/oauth2/authorize
+            token-uri: http://localhost:8080/oauth2/token
+            jwk-set-uri: http://localhost:8080/oauth2/jwks
+            user-info-uri: http://localhost:8080/userinfo
+            user-name-attribute: sub
+
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG 
