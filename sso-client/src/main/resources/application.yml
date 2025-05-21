@@ -40,11 +40,7 @@ spring:
             client-authentication-method: client_secret_basic
         provider:
           sso-client:
-            authorization-uri: http://localhost:8080/oauth2/authorize
-            token-uri: http://localhost:8080/oauth2/token
-            jwk-set-uri: http://localhost:8080/oauth2/jwks
-            user-info-uri: http://localhost:8080/userinfo
-            user-name-attribute: sub
+            issuer-uri: http://localhost:8080
 
   session:
     store-type: jdbc
@@ -54,4 +50,5 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
-    org.springframework.security.oauth2: DEBUG 
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG 

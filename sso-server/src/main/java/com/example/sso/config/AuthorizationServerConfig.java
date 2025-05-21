@@ -31,6 +31,8 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -49,9 +51,17 @@ public class AuthorizationServerConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(Customizer.withDefaults());
+        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
+        authorizationServerConfigurer.oidc(Customizer.withDefaults());
+        
+        RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
+        
+        http
+            .securityMatcher(endpointsMatcher)
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().authenticated())
+            .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+            .apply(authorizationServerConfigurer);
         
         http.exceptionHandling(exceptions -> 
                 exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
@@ -61,10 +71,15 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    @Order(2)
+    @Order(3)
     public SecurityFilterChain standardSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher(request -> !new AntPathRequestMatcher("/userinfo").matches(request))
+            .securityMatcher(request -> 
+                !new OrRequestMatcher(
+                    new AntPathRequestMatcher("/userinfo"),
+                    new AntPathRequestMatcher("/oauth2/**")
+                ).matches(request)
+            )
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
                     new AntPathRequestMatcher("/assets/**"),

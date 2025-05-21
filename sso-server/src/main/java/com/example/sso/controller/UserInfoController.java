@@ -1,9 +1,8 @@
 package com.example.sso.controller;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +17,13 @@ public class UserInfoController {
     
     private static final Logger logger = Logger.getLogger(UserInfoController.class.getName());
 
-    @GetMapping(path = "/userinfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/userinfo")
     public ResponseEntity<Map<String, Object>> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
-        logger.info("处理UserInfo请求");
+        logger.info("处理UserInfo请求, JWT Subject: " + (jwt != null ? jwt.getSubject() : "null"));
         
         if (jwt == null) {
-            logger.warning("JWT为空，可能是认证问题");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.badRequest().build();
         }
-        
-        logger.info("JWT信息: " + jwt.getSubject());
         
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("sub", jwt.getSubject());
@@ -51,8 +47,12 @@ public class UserInfoController {
         
         userInfo.put("preferred_username", jwt.getSubject());
         
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        
+        return ResponseEntity
+                .ok()
+                .headers(headers)
                 .body(userInfo);
     }
 } 
