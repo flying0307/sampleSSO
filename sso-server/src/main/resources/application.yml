@@ -13,12 +13,13 @@ spring:
     name: sso-server
     
   datasource:
-    url: jdbc:h2:mem:sso-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testdb
     username: sa
     password: 
     driver-class-name: org.h2.Driver
     
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -32,8 +33,32 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
+  thymeleaf:
+    cache: false
 
 logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: DEBUG 
+
+oauth2:
+  clients:
+    sample-client:
+      client-id: sample-client
+      client-secret: sample-secret
+      redirect-uris:
+        - http://127.0.0.1:8081/login/oauth2/code/sso-client
+        - http://127.0.0.1:8081/authorized
+        - http://localhost:8081/login/oauth2/code/sso-client
+        - http://localhost:8081/authorized
+        - https://*.abc.com/*
+      scopes:
+        - openid
+        - profile
+        - email
+      grant-types:
+        - authorization_code
+        - refresh_token
+      require-authorization-consent: false
+      access-token-validity-seconds: 3600
+      refresh-token-validity-seconds: 2592000 
